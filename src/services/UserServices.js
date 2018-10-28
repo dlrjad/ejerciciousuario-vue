@@ -37,7 +37,13 @@ export default class RestResource {
     return axios.put('http://localhost:8090/api/user/' + id + '', {
       name: name,
       mail: mail
-    });
+    })
+    /*.then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });*/
   }
 
 }

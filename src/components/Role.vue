@@ -9,14 +9,42 @@
       </tr>
     </table>
     <div v-for="(role, index) in roles" :key="index">
-      <tr>
-        <td><h3>{{ role.role_id }}</h3></td>
-        <td><h3>{{ role.name }}</h3></td>
-        <td><button type="button" class="btn btn-primary">Modificar</button></td>
-        <td><button type="button" class="btn btn-danger"  @click="deleteRole(role.role_id)">Eliminar</button></td>
-      </tr>
+      <table>
+        <tr>
+          <!--td><h3>{{ role.role_id }}</h3></td>
+          <td><h3>{{ role.name }}</h3></td>-->
+          <td colspan="2"><a href="#">{{ role.role_id }} {{ role.name }} </a></td>
+          <td><button type="button" class="btn btn-primary" @click="showUpdateForm(role.role_id)">Modificar</button></td>
+          <td><button type="button" class="btn btn-danger"  @click="deleteRole(role.role_id)">Eliminar</button></td>
+        </tr>
+      </table>
     </div>
-    <button type="button" class="btn btn-success">Añadir</button>
+
+    <div class="clear"></div>
+
+    <button class="btn btn-info btn-sm" @click="prevPage">
+      &lt;
+    </button>
+    <button class="btn btn-info btn-sm" @click="nextPage">
+      &gt;
+    </button>
+    
+    <div class="clear"></div>
+
+    <button type="button" class="btn btn-success" @click="showRegisterForm()">Añadir</button>
+
+    <form action="" v-show="showForm">
+      <h4 v-show="showAdd">Registrar</h4>
+      <h4 v-show="showUpdate">Actualizar</h4>
+      <input v-model="roleName" placeholder="nombre">
+      <input type="hidden" v-model="roleId">
+      
+      <button type="button" class="btn btn-success" @click="addRole(roleName)" v-show="showAdd">Aceptar</button>
+      <button type="button" class="btn btn-success" @click="updateRole(roleId, roleName)" v-show="showUpdate">Aceptar</button>
+    </form>
+
+    <pre>{{ $data }}</pre>
+
   </section>
 </template>
 
@@ -42,15 +70,78 @@ export default {
   data() {
     return {
       roles: [],
-      role: {}
+      role: {},
+      roleId: null,
+      roleName: null,
+      showForm: false,
+      showAdd: false,
+      showUpdate: false,
+      pageNumber: 0
+    }
+  },
+  props: {
+    size:{
+      type:Number,
+      required:false,
+      default: 5
     }
   },
   methods: {
     deleteRole(id) {
-      console.log(id)
-      restApiServices.deleteRole(id).then(res => {
-        this.roles.splice(this.roles.findIndex((id)=>{id.id=res.data.id}), 1)
+      if(confirm("¿Desea eliminar el role con id: "+ id + "?")){
+        console.log(id)
+        restApiServices.deleteRole(id).then(res => {
+          console.log(res.data)
+          this.roles.splice(this.roles.findIndex((id)=>{id.id=res.data.id}), 1)
+        })
+      }
+    },
+    addRole(name) {
+      restApiServices.addRole(name).then(res => {
+        this.roles.push(res.data);
+        this.showForm = false
+        this.showAdd = false
       })
+    },
+    showRegisterForm() {
+      this.showForm = true
+      this.showAdd = true
+      this.showUpdate = false
+    },
+    showUpdateForm(id) {
+      this.roleId = id
+      this.showForm = true
+      this.showUpdate = true
+      this.showAdd = false
+    },
+    updateRole(id, name) {
+      console.log(id, name)
+      restApiServices.updateRole(id, name).then(response => {
+        console.log(response)
+        this.$set(this.roles, id-1, response.data)
+        this.showForm = false
+        this.showUpdate = false
+      })
+    },
+    nextPage(){
+      if(this.pageNumber < this.pageCount)
+        this.pageNumber++;
+    },
+    prevPage(){
+      if(this.pageNumber > 0)
+        this.pageNumber--;
+    }
+  },
+  computed: {
+    pageCount(){
+      let l = this.roles.length,
+      s = this.size;
+      return Math.floor(l/s);
+    },
+    paginatedData(){
+      const start = this.pageNumber * this.size,
+      end = start + this.size;
+      return this.roles.slice(start, end);
     }
   }
 }
@@ -87,5 +178,10 @@ th {
 .data h3 {
   font-size: 18px;
   color: blue;
+}
+
+.clear {
+  clear: both;
+  margin-top: 20px;
 }
 </style>

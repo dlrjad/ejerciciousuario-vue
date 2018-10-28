@@ -9,14 +9,42 @@
       </tr>
     </table>
     <div v-for="(privilege, index) in privileges" :key="index">
-      <tr>
-        <td><h3>{{ privilege.privilege_id }}</h3></td>
-        <td><h3>{{ privilege.name }}</h3></td>
-        <td><button type="button" class="btn btn-primary">Modificar</button></td>
-        <td><button type="button" class="btn btn-danger" @click="deletePrivilege(privilege.privilege_id)">Eliminar</button></td>
-      </tr>
+      <table>
+        <tr>
+          <!--<td><h3>{{ privilege.privilege_id }}</h3></td>
+          <td><h3>{{ privilege.name }}</h3></td>-->
+          <td colspan="2"><a href="#">{{ privilege.privilege_id }} {{ privilege.name }} </a></td>
+          <td><button type="button" class="btn btn-primary" @click="showUpdateForm(privilege.privilege_id)">Modificar</button></td>
+          <td><button type="button" class="btn btn-danger" @click="deletePrivilege(privilege.privilege_id)">Eliminar</button></td>
+        </tr>
+      </table>
     </div>
-    <button type="button" class="btn btn-success">Añadir</button>
+
+    <div class="clear"></div>
+
+    <button class="btn btn-info btn-sm" @click="prevPage">
+      &lt;
+    </button>
+    <button class="btn btn-info btn-sm" @click="nextPage">
+      &gt;
+    </button>
+
+    <div class="clear"></div>
+
+    <button type="button" class="btn btn-success" @click="showRegisterForm()">Añadir</button>
+
+    <form action="" v-show="showForm">
+      <h4 v-show="showAdd">Registrar</h4>
+      <h4 v-show="showUpdate">Actualizar</h4>
+      <input v-model="privilegeName" placeholder="nombre">
+      <input type="hidden" v-model="privilegeId">
+      
+      <button type="button" class="btn btn-success" @click="addPrivilege(privilegeName)" v-show="showAdd">Aceptar</button>
+      <button type="button" class="btn btn-success" @click="updatePrivilege(privilegeId, privilegeName)" v-show="showUpdate">Aceptar</button>
+    </form>
+
+    <pre>{{ $data }}</pre>
+
   </section>
 </template>
 
@@ -42,15 +70,74 @@ export default {
   data() {
     return {
       privileges: [],
-      privilege: {}
+      privilege: {},
+      privilegeId: null,
+      privilegeName: null,
+      showForm: false,
+      showAdd: false,
+      showUpdate: false,
+      pageNumber: 0
+    }
+  },
+  props: {
+    size:{
+      type:Number,
+      required:false,
+      default: 5
     }
   },
   methods: {
     deletePrivilege(id) {
-      console.log(id)
-      restApiServices.deletePrivilege(id).then(res => {
-        this.privileges.splice(this.privileges.findIndex((id)=>{id.id=res.data.id}), 1)
+      if(confirm("¿Desea eliminar el privilegio con id: "+ id + "?")){
+        restApiServices.deletePrivilege(id).then(res => {
+          this.privileges.splice(this.privileges.findIndex((id)=>{id.id=res.data.id}), 1)
+        })
+      }
+    },
+    addPrivilege(name) {
+      restApiServices.addPrivilege(name).then(res => {
+        this.privileges.push(res.data);
+        this.showForm = false
+        this.showAdd = false
       })
+    },
+    showRegisterForm() {
+      this.showForm = true
+      this.showAdd = true
+      this.showUpdate = false
+    },
+    showUpdateForm(id) {
+      this.privilegeId = id
+      this.showForm = true
+      this.showUpdate = true
+      this.showAdd = false
+    },
+    updatePrivilege(id, name) {
+      restApiServices.updatePrivilege(id, name).then(response => {
+        this.$set(this.privileges, id-1, response.data)
+        this.showForm = false
+        this.showUpdate = false
+      })
+    },
+    nextPage(){
+      if(this.pageNumber < this.pageCount)
+        this.pageNumber++;
+    },
+    prevPage(){
+      if(this.pageNumber > 0)
+        this.pageNumber--;
+    }
+  },
+  computed: {
+    pageCount(){
+      let l = this.privileges.length,
+      s = this.size;
+      return Math.floor(l/s);
+    },
+    paginatedData(){
+      const start = this.pageNumber * this.size,
+      end = start + this.size;
+      return this.privileges.slice(start, end);
     }
   }
 }
@@ -87,5 +174,10 @@ th {
 .data h3 {
   font-size: 18px;
   color: blue;
+}
+
+.clear {
+  clear: both;
+  margin-top: 20px;
 }
 </style>
