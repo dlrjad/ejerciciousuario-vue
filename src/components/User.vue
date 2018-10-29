@@ -15,7 +15,7 @@
           <!--<td><h3>{{ user.user_id }}</h3></td>
           <td><h3>{{ user.name }}</h3></td>
           <td><h3>{{ user.mail }}</h3></td>-->
-          <td colspan="3"><a href="#">{{ user.user_id }} {{ user.name }} {{ user.mail }}</a></td>
+          <td colspan="3"><router-link :to="`/user/${user.user_id}`"><a>{{ user.user_id }} {{ user.name }} {{ user.mail }}</a></router-link></td>
           <td><button type="button" class="btn btn-primary" @click="showUpdateForm(user.user_id)">Modificar</button></td>
           <td><button type="button" class="btn btn-danger" @click="deleteUser(user.user_id)">Eliminar</button></td>
         </tr>
@@ -95,8 +95,8 @@ export default {
       if(confirm("¿Desea eliminar el usuario con id: "+ id + "?")){
         //console.log("Borrado")
         restApiServices.deleteUser(id).then(res => {
-          //this.users.splice(this.users.findIndex((id)=>{id.id=res.data.id}), 1)
-          this.$delete(this.users, id)
+          this.users.splice(this.users.findIndex((id)=>{id.id=res.data.id}), 1)
+          //this.$delete(this.users, id)
           //this.users.$remove(res.data)
         })
       } else {

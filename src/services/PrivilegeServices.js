@@ -21,6 +21,10 @@ export default class RestResource {
     })
   }
 
+  getPrivilege(id) {
+    return axios.get('http://localhost:8090/api/privilege/' + id + '')
+  }
+
   deletePrivilege(id) {
     return axios.delete('http://localhost:8090/api/privilege/' + id + '');
   }

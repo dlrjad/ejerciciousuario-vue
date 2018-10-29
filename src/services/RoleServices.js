@@ -7,7 +7,8 @@ export default class RestResource {
           let myData = response.data.map(e => {
             return {
               "role_id": e.role_id,
-              "name": e.name
+              "name": e.name,
+              "privileges": e.privileges
             };
           });
           resolve(myData);
@@ -19,6 +20,10 @@ export default class RestResource {
           console.info("Peticion completa");
         })
     })
+  }
+
+  getRole(id) {
+    return axios.get('http://localhost:8090/api/role/' + id + '')
   }
 
   deleteRole(id) {
@@ -34,6 +39,13 @@ export default class RestResource {
   updateRole(id, name) {
     return axios.put('http://localhost:8090/api/role/' + id + '', {
       name: name
+    });
+  }
+
+  updateRole(id, name, privileges) {
+    return axios.put('http://localhost:8090/api/role/' + id + '', {
+      name: name,
+      privileges: privileges
     });
   }
 

@@ -13,7 +13,7 @@
         <tr>
           <!--<td><h3>{{ privilege.privilege_id }}</h3></td>
           <td><h3>{{ privilege.name }}</h3></td>-->
-          <td colspan="2"><a href="#">{{ privilege.privilege_id }} {{ privilege.name }} </a></td>
+          <td colspan="2"><router-link :to="`/privilege/${privilege.privilege_id}`"><a>{{ privilege.privilege_id }} {{ privilege.name }}</a></router-link></td>
           <td><button type="button" class="btn btn-primary" @click="showUpdateForm(privilege.privilege_id)">Modificar</button></td>
           <td><button type="button" class="btn btn-danger" @click="deletePrivilege(privilege.privilege_id)">Eliminar</button></td>
         </tr>

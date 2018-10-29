@@ -13,7 +13,7 @@
         <tr>
           <!--td><h3>{{ role.role_id }}</h3></td>
           <td><h3>{{ role.name }}</h3></td>-->
-          <td colspan="2"><a href="#">{{ role.role_id }} {{ role.name }} </a></td>
+          <td colspan="2"><router-link :to="`/role/${role.role_id}`"><a href="#">{{ role.role_id }} {{ role.name }}</a></router-link></td>
           <td><button type="button" class="btn btn-primary" @click="showUpdateForm(role.role_id)">Modificar</button></td>
           <td><button type="button" class="btn btn-danger"  @click="deleteRole(role.role_id)">Eliminar</button></td>
         </tr>
