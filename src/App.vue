@@ -4,9 +4,9 @@
     <h1>{{ msg }}</h1>
     <nav>
       <div class="nav nav-tabs" id="nav-tab" role="tablist">
-        <a class="nav-item nav-link active" id="nav-users-tab" data-toggle="tab" href = "#nav-roles"  role="tab" aria-controls="nav-users" aria-selected="true" @click="showComponent('users')"><router-link to="/Users">Usuarios</router-link></a>
-        <a class="nav-item nav-link" id="nav-roles-tab" data-toggle="tab" href="#nav-roles" role="tab" aria-controls="nav-roles" aria-selected="false" @click="showComponent('roles')"><router-link to="/Roles">Roles</router-link></a>
-        <a class="nav-item nav-link" id="nav-privileges-tab" data-toggle="tab" href="#nav-privileges" role="tab" aria-controls="nav-privileges" aria-selected="false" @click="showComponent('privileges')"><router-link to="/Privileges">Privilegios</router-link></a> 
+        <router-link to="/Users" class="nav-item nav-link" active-class="activo"><a id="nav-users-tab" data-toggle="tab" href = "#nav-roles"  role="tab" aria-controls="nav-users" aria-selected="true" @click="showComponent('users')">Usuarios</a></router-link>
+        <router-link to="/Roles" class="nav-item nav-link" active-class="activo"><a  id="nav-roles-tab" data-toggle="tab" href="#nav-roles" role="tab" aria-controls="nav-roles" aria-selected="false" @click="showComponent('roles')">Roles</a></router-link>
+        <router-link to="/Privileges" class="nav-item nav-link" active-class="activo"><a  id="nav-privileges-tab" data-toggle="tab" href="#nav-privileges" role="tab" aria-controls="nav-privileges" aria-selected="false" @click="showComponent('privileges')">Privilegios</a></router-link>
       </div>
     </nav>
     <!--<user v-show="showUser"></user>
@@ -80,5 +80,12 @@ li {
 a {
   color: #42b983;
 }
+
+.activo a {
+  color: blue;
+  font-weight: bold
+}
+
+
 
 </style>

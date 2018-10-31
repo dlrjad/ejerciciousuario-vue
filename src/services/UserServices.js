@@ -8,7 +8,8 @@ export default class RestResource {
             return {
               "user_id": e.user_id,
               "name": e.name,
-              "mail": e.mail
+              "mail": e.mail,
+              "roles": e.roles
             };
           });
           resolve(myData);

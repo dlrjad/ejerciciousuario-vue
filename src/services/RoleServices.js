@@ -1,14 +1,13 @@
 import axios from 'axios'
 export default class RestResource {
-  getRoles() {
+  /*getRoles() {
     return new Promise((resolve, reject) => {
       axios.get('http://localhost:8090/api/roles').then(
         response => {
           let myData = response.data.map(e => {
             return {
               "role_id": e.role_id,
-              "name": e.name,
-              "privileges": e.privileges
+              "name": e.name
             };
           });
           resolve(myData);
@@ -20,8 +19,10 @@ export default class RestResource {
           console.info("Peticion completa");
         })
     })
+  }*/
+  getRoles(){
+    return axios.get('http://localhost:8090/api/roles');
   }
-
   getRole(id) {
     return axios.get('http://localhost:8090/api/role/' + id + '')
   }

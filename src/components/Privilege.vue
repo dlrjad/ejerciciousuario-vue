@@ -11,9 +11,9 @@
     <div v-for="(privilege, index) in privileges" :key="index">
       <table>
         <tr>
-          <!--<td><h3>{{ privilege.privilege_id }}</h3></td>
-          <td><h3>{{ privilege.name }}</h3></td>-->
-          <td colspan="2"><router-link :to="`/privilege/${privilege.privilege_id}`"><a>{{ privilege.privilege_id }} {{ privilege.name }}</a></router-link></td>
+          <router-link :to="`/privilege/${privilege.privilege_id}`"><a><td><h3>{{ privilege.privilege_id }}</h3></td>
+          <td><h3>{{ privilege.name }}</h3></td></a></router-link>
+          <!--<td colspan="2"><router-link :to="`/privilege/${privilege.privilege_id}`"><a>{{ privilege.privilege_id }} {{ privilege.name }}</a></router-link></td>-->
           <td><button type="button" class="btn btn-primary" @click="showUpdateForm(privilege.privilege_id)">Modificar</button></td>
           <td><button type="button" class="btn btn-danger" @click="deletePrivilege(privilege.privilege_id)">Eliminar</button></td>
         </tr>
@@ -42,8 +42,6 @@
       <button type="button" class="btn btn-success" @click="addPrivilege(privilegeName)" v-show="showAdd">Aceptar</button>
       <button type="button" class="btn btn-success" @click="updatePrivilege(privilegeId, privilegeName)" v-show="showUpdate">Aceptar</button>
     </form>
-
-    <pre>{{ $data }}</pre>
 
   </section>
 </template>
@@ -90,7 +88,7 @@ export default {
     deletePrivilege(id) {
       if(confirm("¿Desea eliminar el privilegio con id: "+ id + "?")){
         restApiServices.deletePrivilege(id).then(res => {
-          this.privileges.splice(this.privileges.findIndex((id)=>{id.id=res.data.id}), 1)
+          this.privileges.splice(this.privileges.findIndex(e=>e.privilege_id==id), 1)
         })
       }
     },
@@ -114,7 +112,7 @@ export default {
     },
     updatePrivilege(id, name) {
       restApiServices.updatePrivilege(id, name).then(response => {
-        this.$set(this.privileges, id-1, response.data)
+        this.$set(this.privileges, this.privileges.findIndex(e=>e.privilege_id==id), response.data)
         this.showForm = false
         this.showUpdate = false
       })

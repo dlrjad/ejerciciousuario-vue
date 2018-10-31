@@ -1,10 +1,10 @@
 <template>
-  <section>
+  <section id="data" data-css>
     <h2>Datos del privilegio {{this.privilege.privilege_id}}</h2>
     <ul>
       <li>Nombre: {{ this.privilege.name }}</li>
     </ul>
-    <pre>{{ $data }}</pre>
+
   </section>
 </template>
 
@@ -32,5 +32,12 @@ export default {
 </script>
 
 <style>
+
+#data[data-css] {
+  margin: auto;
+  margin-top: 50px;
+  width: 50%;
+  padding: 10px;
+}
 
 </style>

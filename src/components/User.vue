@@ -12,11 +12,12 @@
     <div v-for="(user, index) in paginatedData" :key="index">
       <table>
         <tr>
-          <!--<td><h3>{{ user.user_id }}</h3></td>
+          <router-link :to="`/user/${user.user_id}`">
+          <td><h3>{{ user.user_id }}</h3></td>
           <td><h3>{{ user.name }}</h3></td>
-          <td><h3>{{ user.mail }}</h3></td>-->
-          <td colspan="3"><router-link :to="`/user/${user.user_id}`"><a>{{ user.user_id }} {{ user.name }} {{ user.mail }}</a></router-link></td>
-          <td><button type="button" class="btn btn-primary" @click="showUpdateForm(user.user_id)">Modificar</button></td>
+          <td><h3>{{ user.mail }}</h3></td></router-link>
+          <!--<td colspan="3"><router-link :to="`/user/${user.user_id}`"><a>{{ user.user_id }} {{ user.name }} {{ user.mail }}</a></router-link></td>-->
+          <td><button type="button" class="btn btn-primary" @click="showUpdateForm(user.user_id, user.roles)">Modificar</button></td>
           <td><button type="button" class="btn btn-danger" @click="deleteUser(user.user_id)">Eliminar</button></td>
         </tr>
       </table>
@@ -39,14 +40,15 @@
       <h4 v-show="showAdd">Registrar</h4>
       <h4 v-show="showUpdate">Actualizar</h4>
       <input v-model="userName" placeholder="nombre">
-      <input v-model="userMail" placeholder="email">
+      <input type="email" v-model="userMail" placeholder="email">
       <input type="hidden" v-model="userId">
-      
-      <button type="button" class="btn btn-success" @click="addUser(userName, userMail)" v-show="showAdd">Aceptar</button>
-      <button type="button" class="btn btn-success" @click="updateUser(userId, userName, userMail)" v-show="showUpdate">Aceptar</button>
-    </form>
+      <input type="hidden" v-model="userRoles">
 
-    <pre>{{ $data }}</pre>
+      <button type="button" class="btn btn-success" @click="addUser(userName, userMail)" v-show="showAdd">Aceptar</button>
+      <button type="button" class="btn btn-success" @click="updateUser(userId, userName, userMail, userRoles)" v-show="showUpdate">Aceptar</button>
+    </form>
+    
+    <!--<pre>{{ $data }}</pre>-->
 
   </section>
 </template>
@@ -77,6 +79,7 @@ export default {
       userId: null,
       userName: null,
       userMail: null,
+      userRoles: null,
       showForm: false,
       showAdd: false,
       showUpdate: false,
@@ -93,14 +96,11 @@ export default {
   methods: {
     deleteUser(id) {
       if(confirm("¿Desea eliminar el usuario con id: "+ id + "?")){
-        //console.log("Borrado")
         restApiServices.deleteUser(id).then(res => {
-          this.users.splice(this.users.findIndex((id)=>{id.id=res.data.id}), 1)
+          this.users.splice(this.users.findIndex(e=>e.user_id==id), 1)
           //this.$delete(this.users, id)
           //this.users.$remove(res.data)
         })
-      } else {
-        //console.log("Cancelado")
       }
     },
     addUser(name, mail) {
@@ -115,17 +115,18 @@ export default {
       this.showAdd = true
       this.showUpdate = false
     },
-    showUpdateForm(id) {
+    showUpdateForm(id, roles) {
       this.userId = id
+      this.userRoles = roles
       this.showForm = true
       this.showUpdate = true
       this.showAdd = false
     },
-    updateUser(id, name, mail) {
-      console.log(id, name, mail)
-      restApiServices.updateUser(id, name, mail).then(response => {
+    updateUser(id, name, mail, roles) {
+      console.log(id, name, mail, roles)
+      restApiServices.updateUser(id, name, mail, roles).then(response => {
         console.log(response)
-        this.$set(this.users, id-1, response.data)
+        this.$set(this.users, this.users.findIndex(e=>e.user_id==id), response.data)
         this.showForm = false
         this.showUpdate = false
         //this.users.$set(id, res.data)
@@ -167,7 +168,7 @@ export default {
   background-color: grey;
   color: white;
 }
- tr, td {
+tr, td {
   margin: auto;
   width: 10%;
   padding: 10px;

@@ -11,10 +11,10 @@
     <div v-for="(role, index) in roles" :key="index">
       <table>
         <tr>
-          <!--td><h3>{{ role.role_id }}</h3></td>
-          <td><h3>{{ role.name }}</h3></td>-->
-          <td colspan="2"><router-link :to="`/role/${role.role_id}`"><a href="#">{{ role.role_id }} {{ role.name }}</a></router-link></td>
-          <td><button type="button" class="btn btn-primary" @click="showUpdateForm(role.role_id)">Modificar</button></td>
+          <router-link :to="`/role/${role.role_id}`"><a><td><h3>{{ role.role_id }}</h3></td>
+          <td><h3>{{ role.name }}</h3></td></a></router-link>
+          <!--<td colspan="2"><router-link :to="`/role/${role.role_id}`"><a href="#">{{ role.role_id }} {{ role.name }}</a></router-link></td>-->
+          <td><button type="button" class="btn btn-primary" @click="showUpdateForm(role.role_id, role.privileges)">Modificar</button></td>
           <td><button type="button" class="btn btn-danger"  @click="deleteRole(role.role_id)">Eliminar</button></td>
         </tr>
       </table>
@@ -38,12 +38,11 @@
       <h4 v-show="showUpdate">Actualizar</h4>
       <input v-model="roleName" placeholder="nombre">
       <input type="hidden" v-model="roleId">
+      <input type="hidden" v-model="rolePrivileges">
       
       <button type="button" class="btn btn-success" @click="addRole(roleName)" v-show="showAdd">Aceptar</button>
-      <button type="button" class="btn btn-success" @click="updateRole(roleId, roleName)" v-show="showUpdate">Aceptar</button>
+      <button type="button" class="btn btn-success" @click="updateRole(roleId, roleName, rolePrivileges)" v-show="showUpdate">Aceptar</button>
     </form>
-
-    <pre>{{ $data }}</pre>
 
   </section>
 </template>
@@ -58,7 +57,7 @@ export default {
   created() {
     restApiServices.getRoles().then(
       roles => {
-        this.roles = roles
+        this.roles = roles.data
       }
     ).catch(
       error => {
@@ -73,6 +72,7 @@ export default {
       role: {},
       roleId: null,
       roleName: null,
+      rolePrivileges: null,
       showForm: false,
       showAdd: false,
       showUpdate: false,
@@ -89,10 +89,8 @@ export default {
   methods: {
     deleteRole(id) {
       if(confirm("¿Desea eliminar el role con id: "+ id + "?")){
-        console.log(id)
         restApiServices.deleteRole(id).then(res => {
-          console.log(res.data)
-          this.roles.splice(this.roles.findIndex((id)=>{id.id=res.data.id}), 1)
+          this.roles.splice(this.roles.findIndex(e=>e.role_id==id), 1)
         })
       }
     },
@@ -108,17 +106,18 @@ export default {
       this.showAdd = true
       this.showUpdate = false
     },
-    showUpdateForm(id) {
+    showUpdateForm(id, privileges) {
       this.roleId = id
+      this.rolePrivileges = privileges
       this.showForm = true
       this.showUpdate = true
       this.showAdd = false
     },
-    updateRole(id, name) {
-      console.log(id, name)
-      restApiServices.updateRole(id, name).then(response => {
+    updateRole(id, name, privileges) {
+      console.log(id, name, privileges)
+      restApiServices.updateRole(id, name, privileges).then(response => {
         console.log(response)
-        this.$set(this.roles, id-1, response.data)
+        this.$set(this.roles, this.roles.findIndex(e=>e.role_id==id), response.data)
         this.showForm = false
         this.showUpdate = false
       })
