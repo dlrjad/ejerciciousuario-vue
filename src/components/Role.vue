@@ -12,10 +12,10 @@
       <table>
         <tr>
           <router-link :to="`/role/${role.role_id}`"><a><td><h3>{{ role.role_id }}</h3></td>
-          <td><h3>{{ role.name }}</h3></td></a></router-link>
+          <td style="padding-left: 200px"><h3>{{ role.name }}</h3></td></a></router-link>
           <!--<td colspan="2"><router-link :to="`/role/${role.role_id}`"><a href="#">{{ role.role_id }} {{ role.name }}</a></router-link></td>-->
-          <td><button type="button" class="btn btn-primary" @click="showUpdateForm(role.role_id, role.privileges)">Modificar</button></td>
-          <td><button type="button" class="btn btn-danger"  @click="deleteRole(role.role_id)">Eliminar</button></td>
+          <td style="padding-left: 0px"><button type="button" class="btn btn-primary" @click="showUpdateForm(role.role_id, role.privileges)">Modificar</button></td>
+          <td style="padding-left: 270px"><button type="button" class="btn btn-danger"  @click="deleteRole(role.role_id)">Eliminar</button></td>
         </tr>
       </table>
     </div>
@@ -162,6 +162,7 @@ export default {
   margin: auto;
   width: 10%;
   padding: 10px;
+  text-align: justify
 }
 th {
   margin: auto;

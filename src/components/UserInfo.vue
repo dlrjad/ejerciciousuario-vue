@@ -23,6 +23,7 @@
     <button type="button" class="btn btn-primary" @click="assignRole(user.user_id, user.name, user.mail)">Asignar</button>
 
   </section>
+  
 </template>
 
 <script>

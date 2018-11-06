@@ -12,10 +12,10 @@
       <table>
         <tr>
           <router-link :to="`/privilege/${privilege.privilege_id}`"><a><td><h3>{{ privilege.privilege_id }}</h3></td>
-          <td><h3>{{ privilege.name }}</h3></td></a></router-link>
+          <td style="padding-left: 200px"><h3>{{ privilege.name }}</h3></td></a></router-link>
           <!--<td colspan="2"><router-link :to="`/privilege/${privilege.privilege_id}`"><a>{{ privilege.privilege_id }} {{ privilege.name }}</a></router-link></td>-->
-          <td><button type="button" class="btn btn-primary" @click="showUpdateForm(privilege.privilege_id)">Modificar</button></td>
-          <td><button type="button" class="btn btn-danger" @click="deletePrivilege(privilege.privilege_id)">Eliminar</button></td>
+          <td style="padding-left: 100px"><button type="button" class="btn btn-primary" @click="showUpdateForm(privilege.privilege_id)">Modificar</button></td>
+          <td style="padding-left: 270px"><button type="button" class="btn btn-danger" @click="deletePrivilege(privilege.privilege_id)">Eliminar</button></td>
         </tr>
       </table>
     </div>
@@ -157,6 +157,7 @@ export default {
   margin: auto;
   width: 10%;
   padding: 10px;
+  text-align: justify
 }
 th {
   margin: auto;

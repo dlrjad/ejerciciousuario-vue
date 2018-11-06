@@ -14,11 +14,11 @@
         <tr>
           <router-link :to="`/user/${user.user_id}`">
           <td><h3>{{ user.user_id }}</h3></td>
-          <td><h3>{{ user.name }}</h3></td>
-          <td><h3>{{ user.mail }}</h3></td></router-link>
+          <td style="padding-left: 200px"><h3>{{ user.name }}</h3></td>
+          <td style="padding-left: 100px"><h3>{{ user.mail }}</h3></td></router-link>
           <!--<td colspan="3"><router-link :to="`/user/${user.user_id}`"><a>{{ user.user_id }} {{ user.name }} {{ user.mail }}</a></router-link></td>-->
-          <td><button type="button" class="btn btn-primary" @click="showUpdateForm(user.user_id, user.roles)">Modificar</button></td>
-          <td><button type="button" class="btn btn-danger" @click="deleteUser(user.user_id)">Eliminar</button></td>
+          <td style="padding-left: 0px"><button type="button" class="btn btn-primary" @click="showUpdateForm(user.user_id, user.roles)">Modificar</button></td>
+          <td style="padding-left: 100px"><button type="button" class="btn btn-danger" @click="deleteUser(user.user_id)">Eliminar</button></td>
         </tr>
       </table>
     </div>
@@ -49,7 +49,7 @@
     </form>
     
     <!--<pre>{{ $data }}</pre>-->
-
+    
   </section>
 </template>
 
@@ -172,6 +172,7 @@ tr, td {
   margin: auto;
   width: 10%;
   padding: 10px;
+  text-align: justify
 }
 th {
   margin: auto;
